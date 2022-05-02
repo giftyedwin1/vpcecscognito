@@ -6,5 +6,175 @@
     "us-east-1d",
     "us-east-1e",
     "us-east-1f"
-  ]
+  ],
+  "vpc-provider:account=078209247224:filter.vpc-id=vpc-0172db792513734e5:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0172db792513734e5",
+    "vpcCidrBlock": "192.168.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Octank-Private2",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-07c080fd260cf8cb5",
+            "cidr": "192.168.64.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0e1792b410e2fd088"
+          },
+          {
+            "subnetId": "subnet-0d4868e95dddcf00c",
+            "cidr": "192.168.96.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-0560e0371f1e81810"
+          }
+        ]
+      },
+      {
+        "name": "Octank-Public2",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-0588aa4d8406da9d9",
+            "cidr": "192.168.192.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0c80cadc697b6dcf6"
+          },
+          {
+            "subnetId": "subnet-0023bb514e21d56dd",
+            "cidr": "192.168.224.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-085f5e6e76c438205"
+          }
+        ]
+      },
+      {
+        "name": "Octank-Private1",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-0a8ebc49b456d0d88",
+            "cidr": "192.168.0.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-062ed6dd09b7faa48"
+          },
+          {
+            "subnetId": "subnet-0fd9102e96779856d",
+            "cidr": "192.168.32.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-059b5d987759b9770"
+          }
+        ]
+      },
+      {
+        "name": "Octank-Public1",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-024e7b43c27d91b0b",
+            "cidr": "192.168.128.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0878008cd257a573e"
+          },
+          {
+            "subnetId": "subnet-02efabcc0e7d398b5",
+            "cidr": "192.168.160.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-0fdc453268060077d"
+          }
+        ]
+      }
+    ]
+  },
+  "hosted-zone:account=078209247224:domainName=aboctank.com:region=us-east-1": {
+    "Id": "/hostedzone/Z01423413C6EAVJ11EKEK",
+    "Name": "aboctank.com."
+  },
+  "vpc-provider:account=078209247224:filter.tag:Name=Ab1VPCStack/Octank-vpc:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0172db792513734e5",
+    "vpcCidrBlock": "192.168.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Octank-Private2",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-07c080fd260cf8cb5",
+            "cidr": "192.168.64.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0e1792b410e2fd088"
+          },
+          {
+            "subnetId": "subnet-0d4868e95dddcf00c",
+            "cidr": "192.168.96.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-0560e0371f1e81810"
+          }
+        ]
+      },
+      {
+        "name": "Octank-Public2",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-0588aa4d8406da9d9",
+            "cidr": "192.168.192.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0c80cadc697b6dcf6"
+          },
+          {
+            "subnetId": "subnet-0023bb514e21d56dd",
+            "cidr": "192.168.224.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-085f5e6e76c438205"
+          }
+        ]
+      },
+      {
+        "name": "Octank-Private1",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-0a8ebc49b456d0d88",
+            "cidr": "192.168.0.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-062ed6dd09b7faa48"
+          },
+          {
+            "subnetId": "subnet-0fd9102e96779856d",
+            "cidr": "192.168.32.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-059b5d987759b9770"
+          }
+        ]
+      },
+      {
+        "name": "Octank-Public1",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-024e7b43c27d91b0b",
+            "cidr": "192.168.128.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0878008cd257a573e"
+          },
+          {
+            "subnetId": "subnet-02efabcc0e7d398b5",
+            "cidr": "192.168.160.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-0fdc453268060077d"
+          }
+        ]
+      }
+    ]
+  },
+  "load-balancer:account=078209247224:loadBalancerArn=arn$:aws:elasticloadbalancing:us-east-1:078209247224:loadbalancer/net/Ab1EC-octan-DOEMQN5E8CRR/403699d000a6a0c5:loadBalancerType=network:region=us-east-1": {
+    "loadBalancerArn": "arn:aws:elasticloadbalancing:us-east-1:078209247224:loadbalancer/net/Ab1EC-octan-DOEMQN5E8CRR/403699d000a6a0c5",
+    "loadBalancerCanonicalHostedZoneId": "Z26RNL4JYFTOTI",
+    "loadBalancerDnsName": "Ab1EC-octan-DOEMQN5E8CRR-403699d000a6a0c5.elb.us-east-1.amazonaws.com",
+    "vpcId": "vpc-0172db792513734e5",
+    "securityGroupIds": [],
+    "ipAddressType": "ipv4"
+  }
 }
