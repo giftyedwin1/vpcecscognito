@@ -176,5 +176,179 @@
     "vpcId": "vpc-0172db792513734e5",
     "securityGroupIds": [],
     "ipAddressType": "ipv4"
+  },
+  "availability-zones:account=527384991348:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ],
+  "vpc-provider:account=527384991348:filter.vpc-id=vpc-0d12c5c9e9285a2cc:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0d12c5c9e9285a2cc",
+    "vpcCidrBlock": "192.168.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Greenman-Private2",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-02094f4a3550aaf5a",
+            "cidr": "192.168.64.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-036b461ff1640d088"
+          },
+          {
+            "subnetId": "subnet-0d561c3734748e1aa",
+            "cidr": "192.168.96.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-0e222dbce1ddb428a"
+          }
+        ]
+      },
+      {
+        "name": "Greenman-Public1",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-08a4090e6028f9789",
+            "cidr": "192.168.128.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0954cb31b89952dbb"
+          },
+          {
+            "subnetId": "subnet-011ce1ea5abfc2e7e",
+            "cidr": "192.168.160.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-03802d6882aff24c9"
+          }
+        ]
+      },
+      {
+        "name": "Greenman-Public2",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-0665430ec1209776e",
+            "cidr": "192.168.192.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0ccb9042c9164097d"
+          },
+          {
+            "subnetId": "subnet-01563b62170b8ea47",
+            "cidr": "192.168.224.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-05cb689b133e47500"
+          }
+        ]
+      },
+      {
+        "name": "Greenman-Private1",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-054a27534e33545f8",
+            "cidr": "192.168.0.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0b8a883a4d1a328ce"
+          },
+          {
+            "subnetId": "subnet-073f2fa20d8c602a8",
+            "cidr": "192.168.32.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-0e4e1d0374f3ae0b4"
+          }
+        ]
+      }
+    ]
+  },
+  "vpc-provider:account=527384991348:filter.tag:Name=Ab1VPCStack/Greenman-vpc:region=us-east-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-0d12c5c9e9285a2cc",
+    "vpcCidrBlock": "192.168.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Greenman-Private2",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-02094f4a3550aaf5a",
+            "cidr": "192.168.64.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-036b461ff1640d088"
+          },
+          {
+            "subnetId": "subnet-0d561c3734748e1aa",
+            "cidr": "192.168.96.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-0e222dbce1ddb428a"
+          }
+        ]
+      },
+      {
+        "name": "Greenman-Public1",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-08a4090e6028f9789",
+            "cidr": "192.168.128.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0954cb31b89952dbb"
+          },
+          {
+            "subnetId": "subnet-011ce1ea5abfc2e7e",
+            "cidr": "192.168.160.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-03802d6882aff24c9"
+          }
+        ]
+      },
+      {
+        "name": "Greenman-Public2",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-0665430ec1209776e",
+            "cidr": "192.168.192.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0ccb9042c9164097d"
+          },
+          {
+            "subnetId": "subnet-01563b62170b8ea47",
+            "cidr": "192.168.224.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-05cb689b133e47500"
+          }
+        ]
+      },
+      {
+        "name": "Greenman-Private1",
+        "type": "Private",
+        "subnets": [
+          {
+            "subnetId": "subnet-054a27534e33545f8",
+            "cidr": "192.168.0.0/19",
+            "availabilityZone": "us-east-1a",
+            "routeTableId": "rtb-0b8a883a4d1a328ce"
+          },
+          {
+            "subnetId": "subnet-073f2fa20d8c602a8",
+            "cidr": "192.168.32.0/19",
+            "availabilityZone": "us-east-1b",
+            "routeTableId": "rtb-0e4e1d0374f3ae0b4"
+          }
+        ]
+      }
+    ]
+  },
+  "load-balancer:account=527384991348:loadBalancerArn=arn$:aws:elasticloadbalancing:us-east-1:527384991348:loadbalancer/net/Ab1EC-green-9WF6JWY7ZO7J/0209e9350c109a41:loadBalancerType=network:region=us-east-1": {
+    "loadBalancerArn": "arn:aws:elasticloadbalancing:us-east-1:527384991348:loadbalancer/net/Ab1EC-green-9WF6JWY7ZO7J/0209e9350c109a41",
+    "loadBalancerCanonicalHostedZoneId": "Z26RNL4JYFTOTI",
+    "loadBalancerDnsName": "Ab1EC-green-9WF6JWY7ZO7J-0209e9350c109a41.elb.us-east-1.amazonaws.com",
+    "vpcId": "vpc-0d12c5c9e9285a2cc",
+    "securityGroupIds": [],
+    "ipAddressType": "ipv4"
   }
 }

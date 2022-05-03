@@ -17,21 +17,20 @@ export class Ab1ECSStack extends Stack {
     super(scope, id, props);
 
     //TODO:Externalize
-    const clientPrefix = `octank`;
-    const vpcId = `vpc-0172db792513734e5`;
+    const clientPrefix = `greenman`; //ECR repo has to be all lower case
+    const vpcId = `vpc-0d12c5c9e9285a2cc`;
     const domain = 'aboctank.com'
     const EPHEMERAL_PORT_RANGE = ec2.Port.tcpRange(32768, 65535);
-
     //End TODO:Externalize
 
     const vpc = ec2.Vpc.fromLookup(this, `${clientPrefix}-vpc`, {
       vpcId: vpcId,
     });
 
-    //Hosted Zone manually created
+    /*Hosted Zone manually created
     const zone = route53.HostedZone.fromLookup(this, `${clientPrefix}-zone`, {
       domainName: domain,
-    });
+    });*/
 
     const repository = new ecr.Repository(this, `${clientPrefix}-repository`, {
       repositoryName: `${clientPrefix}-repository`,

@@ -8,7 +8,7 @@ export class Ab1CognitoStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const clientPrefix = `Octank`;
+    const clientPrefix = `Greenman`;
 
     const userPool = new cognito.UserPool(this, `${clientPrefix}-user-pool`, {
     signInAliases: {

@@ -7,7 +7,7 @@ export class Ab1VPCStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const clientPrefix = `Octank`;
+    const clientPrefix = `Greenman`;
 
     // Create VPC for use with Neptune
     const octankVpc = new ec2.Vpc(this, `${clientPrefix}-vpc`, {

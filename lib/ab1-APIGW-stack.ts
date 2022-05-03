@@ -11,10 +11,10 @@ export class Ab1APIGWStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const clientPrefix = `Octank`;
-    const vpcId = 'Ab1VPCStack/Octank-vpc'
-    const nlbArn = `arn:aws:elasticloadbalancing:us-east-1:078209247224:loadbalancer/net/Ab1EC-octan-DOEMQN5E8CRR/403699d000a6a0c5`;
-    const userPoolArn = `arn:aws:cognito-idp:us-east-1:078209247224:userpool/us-east-1_XnxrzLWiQ`;
+    const clientPrefix = `Greenman`;
+    const vpcId = 'Ab1VPCStack/Greenman-vpc'
+    const nlbArn = `arn:aws:elasticloadbalancing:us-east-1:527384991348:loadbalancer/net/Ab1EC-green-9WF6JWY7ZO7J/0209e9350c109a41`;
+    const userPoolArn = `arn:aws:cognito-idp:us-east-1:527384991348:userpool/us-east-1_OXoibuufg`;
 
     const tenantVpc = ec2.Vpc.fromLookup(this, `${clientPrefix}-link`, {vpcName: `${vpcId}`});
     const nlb = elasticloadbalancer.NetworkLoadBalancer.fromLookup(this, '${clientPrefix}-nlb', {loadBalancerArn: `${nlbArn}`});
