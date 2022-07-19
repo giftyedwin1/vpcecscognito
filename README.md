@@ -22,15 +22,5 @@ If this is a brand new account run
 Deploy the stacks, in the following order
 * `cdk deploy Ab1VPCStack`      deploy VPC/Subnet Stack
 * `cdk deploy Ab1ECSStack`      deploy ECS stack
-
-Once ECR is created upload the docker image, probably better to have separate stack for tasks (this is POC)
-
 * `cdk deploy Ab1CognitoStack`  Cognito
 * `cdk deploy Ab1APIGWStack`    API GW Stack with cognito auto
-
-TODO: In ab1-APIGW-stack, replace the following variables, I still need to make these to be passed (even better get it from SSM)
-const nlbArn = `xxxxxxxx`;
-const userPoolArn = `xxxxxx`;
-
-Appendix
-========

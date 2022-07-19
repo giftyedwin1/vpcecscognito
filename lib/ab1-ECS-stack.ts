@@ -4,7 +4,6 @@ import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from "aws-cdk-lib/aws-ecs";
 import * as ecr from "aws-cdk-lib/aws-ecr";
-import * as certificatemanager from "aws-cdk-lib/aws-certificatemanager";
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as route53 from "aws-cdk-lib/aws-route53";
 
@@ -13,7 +12,9 @@ import { domain } from 'process';
 import { ISubnet, Peer, Port, SecurityGroup } from 'aws-cdk-lib/aws-ec2';
 import { NetworkLoadBalancer } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { Policy, Role } from 'aws-cdk-lib/aws-iam';
-import { FargateTaskDefinition, LogDriver, RepositoryImage } from 'aws-cdk-lib/aws-ecs';
+import { ContainerImage, FargateTaskDefinition, LogDriver, RepositoryImage } from 'aws-cdk-lib/aws-ecs';
+import { DockerImageAsset } from 'aws-cdk-lib/aws-ecr-assets';
+import * as path from 'path';
 
 export interface Ab1ECSStackProps extends cdk.StackProps {
   vpc: ec2.Vpc,
@@ -34,8 +35,18 @@ export class Ab1ECSStack extends Stack {
       repositoryName: `${clientPrefix}-repository`,
     });
 
+    const saasAsset = new DockerImageAsset(this, 'SAASImage', {
+      directory: path.join(__dirname, '../saasapp'),
+      file: "Dockerfile"
+    });
+
     const xrayRepository = new ecr.Repository(this, `${clientPrefix}-xray-repository`, {
       repositoryName: `${clientPrefix}-xray-repository`,
+    });
+
+    const xRayAsset = new DockerImageAsset(this, 'XRayImage', {
+      directory: path.join(__dirname, '../saasapp'),
+      file: "DockerXrayfile"
     });
 
     const cluster = new ecs.Cluster(this, `${clientPrefix}-cluster`, {
@@ -112,21 +123,18 @@ export class Ab1ECSStack extends Stack {
         cpu: 256,
         memoryLimitMiB: 512,
         taskRole: taskRole,
-      });
-
-    const image = RepositoryImage.fromEcrRepository(repository, "latest");
+    });
 
     taskDefinition.addContainer(`${clientPrefix}-container`, {
-      image: image,
+      image: ContainerImage.fromDockerImageAsset(saasAsset),
       portMappings: [ {containerPort: 8080, hostPort: 8080, protocol: ecs.Protocol.TCP} ],
       memoryLimitMiB: 512,
       //environment: props.taskEnv,
       logging: ecs.LogDriver.awsLogs({ streamPrefix: clientPrefix }),
     });
 
-    const xrayImage = RepositoryImage.fromEcrRepository(xrayRepository, "latest");
     const xray = taskDefinition.addContainer('xray', {
-      image: xrayImage,
+      image: ContainerImage.fromDockerImageAsset(xRayAsset),
       cpu: 32,
       memoryReservationMiB: 256,
       essential: false,
@@ -180,11 +188,6 @@ export class Ab1ECSStack extends Stack {
       value: repository.repositoryUri,
     });
 
-    new CfnOutput(this, `ImageName`, {
-      exportName: `ImageName`,
-      value: image.imageName,
-    });
-
     new CfnOutput(this, `ClusterName`, {
       exportName: `ClusterName`,
       value: cluster.clusterName,
@@ -192,3 +195,7 @@ export class Ab1ECSStack extends Stack {
     
   }
 }
+function self(self: any, arg1: string, arg2: string, arg3: string) {
+  throw new Error('Function not implemented.');
+}
+
