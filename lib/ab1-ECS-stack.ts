@@ -31,19 +31,12 @@ export class Ab1ECSStack extends Stack {
     const clientPrefix = props?.tenant!; //ECR repo has to be all lower case
     const vpc = props?.vpc!;
 
-    const repository = new ecr.Repository(this, `${clientPrefix}-repository`, {
-      repositoryName: `${clientPrefix}-repository`,
-    });
-
     const saasAsset = new DockerImageAsset(this, 'SAASImage', {
-      directory: path.join(__dirname, '../saasapp'),
-      file: "Dockerfile"
-    });
-
-    const xrayRepository = new ecr.Repository(this, `${clientPrefix}-xray-repository`, {
-      repositoryName: `${clientPrefix}-xray-repository`,
-    });
-
+        directory: path.join(__dirname, '../saasapp'),
+        file: "Dockerfile",
+      },
+    );
+    
     const xRayAsset = new DockerImageAsset(this, 'XRayImage', {
       directory: path.join(__dirname, '../saasapp'),
       file: "DockerXrayfile"
@@ -181,11 +174,6 @@ export class Ab1ECSStack extends Stack {
     new CfnOutput(this, `ServiceName`, {
       exportName: `ServiceName`,
       value: service.serviceName,
-    });
-
-    new CfnOutput(this, `ImageRepositoryUri`, {
-      exportName: `ImageRepositoryUri`,
-      value: repository.repositoryUri,
     });
 
     new CfnOutput(this, `ClusterName`, {
