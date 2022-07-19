@@ -350,5 +350,13 @@
     "vpcId": "vpc-0d12c5c9e9285a2cc",
     "securityGroupIds": [],
     "ipAddressType": "ipv4"
-  }
+  },
+  "availability-zones:account=876849536577:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ]
 }

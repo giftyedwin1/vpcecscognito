@@ -1,4 +1,4 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
+import { CfnOutput, Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
@@ -10,30 +10,32 @@ import * as route53 from "aws-cdk-lib/aws-route53";
 
 import * as elasticloadbalancer from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import { domain } from 'process';
-import { ISubnet } from 'aws-cdk-lib/aws-ec2';
+import { ISubnet, Peer, Port, SecurityGroup } from 'aws-cdk-lib/aws-ec2';
+import { NetworkLoadBalancer } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import { Policy, Role } from 'aws-cdk-lib/aws-iam';
+import { FargateTaskDefinition, LogDriver, RepositoryImage } from 'aws-cdk-lib/aws-ecs';
+
+export interface Ab1ECSStackProps extends cdk.StackProps {
+  vpc: ec2.Vpc,
+  tenant: string
+}
 
 export class Ab1ECSStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  
+  public readonly loadbalancer: NetworkLoadBalancer;
+
+  constructor(scope: Construct, id: string, props?: Ab1ECSStackProps) {
     super(scope, id, props);
 
-    //TODO:Externalize
-    const clientPrefix = `greenman`; //ECR repo has to be all lower case
-    const vpcId = `vpc-0d12c5c9e9285a2cc`;
-    const domain = 'aboctank.com'
-    const EPHEMERAL_PORT_RANGE = ec2.Port.tcpRange(32768, 65535);
-    //End TODO:Externalize
-
-    const vpc = ec2.Vpc.fromLookup(this, `${clientPrefix}-vpc`, {
-      vpcId: vpcId,
-    });
-
-    /*Hosted Zone manually created
-    const zone = route53.HostedZone.fromLookup(this, `${clientPrefix}-zone`, {
-      domainName: domain,
-    });*/
+    const clientPrefix = props?.tenant!; //ECR repo has to be all lower case
+    const vpc = props?.vpc!;
 
     const repository = new ecr.Repository(this, `${clientPrefix}-repository`, {
       repositoryName: `${clientPrefix}-repository`,
+    });
+
+    const xrayRepository = new ecr.Repository(this, `${clientPrefix}-xray-repository`, {
+      repositoryName: `${clientPrefix}-xray-repository`,
     });
 
     const cluster = new ecs.Cluster(this, `${clientPrefix}-cluster`, {
@@ -59,7 +61,7 @@ export class Ab1ECSStack extends Stack {
       }
     });
     // load balancer resources
-    const elb = new elasticloadbalancer.NetworkLoadBalancer(
+    this.loadbalancer = new NetworkLoadBalancer(
       this,
       `${clientPrefix}-elb`,
       {
@@ -69,44 +71,50 @@ export class Ab1ECSStack extends Stack {
       }
     );
 
-    const elbSG = new ec2.SecurityGroup(this, `${clientPrefix}-elbSG`, {
+    const elbSG = new SecurityGroup(this, `${clientPrefix}-elbSG`, {
       vpc,
       allowAllOutbound: true,
     });
 
     elbSG.addIngressRule(
-      ec2.Peer.anyIpv4(),
-      ec2.Port.tcp(8080),
+      Peer.anyIpv4(),
+      Port.tcp(8080),
       "Allow https traffic"
     );
 
     // the role assumed by the task and its containers
-    const taskRole = new iam.Role(this, "task-role", {
+    const taskRole = new Role(this, "task-role", {
       assumedBy: new iam.ServicePrincipal("ecs-tasks.amazonaws.com"),
       roleName: "task-role",
       description: "Role that the api task definitions use to run the api code",
     });
 
     taskRole.attachInlinePolicy(
-      new iam.Policy(this, `${clientPrefix}-task-policy`, {
+      new Policy(this, `${clientPrefix}-task-policy`, {
         statements: [
           // policies to allow access to other AWS services from within the container e.g Translate
           new iam.PolicyStatement({
             effect: iam.Effect.ALLOW,
             actions: ["translate:*"],
-            resources: ["*"],
+            resources: ["*"]
           }),
+          new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
+            actions: ["xray:*"],
+            resources: ["*"]
+          })
         ],
       })
     );
-    const taskDefinition = new ecs.FargateTaskDefinition(this,`${clientPrefix}-task`, {
+
+    const taskDefinition = new FargateTaskDefinition(this,`${clientPrefix}-task`, {
         family: `${clientPrefix}-task`,
         cpu: 256,
         memoryLimitMiB: 512,
         taskRole: taskRole,
       });
 
-    const image = ecs.RepositoryImage.fromEcrRepository(repository, "latest");
+    const image = RepositoryImage.fromEcrRepository(repository, "latest");
 
     taskDefinition.addContainer(`${clientPrefix}-container`, {
       image: image,
@@ -114,6 +122,19 @@ export class Ab1ECSStack extends Stack {
       memoryLimitMiB: 512,
       //environment: props.taskEnv,
       logging: ecs.LogDriver.awsLogs({ streamPrefix: clientPrefix }),
+    });
+
+    const xrayImage = RepositoryImage.fromEcrRepository(xrayRepository, "latest");
+    const xray = taskDefinition.addContainer('xray', {
+      image: xrayImage,
+      cpu: 32,
+      memoryReservationMiB: 256,
+      essential: false,
+      logging: LogDriver.awsLogs({ streamPrefix: clientPrefix })
+    });
+    xray.addPortMappings({
+      containerPort: 2000,
+      protocol: ecs.Protocol.UDP
     });
 
     const service = new ecs.FargateService(this, `${clientPrefix}-service`, {
@@ -137,7 +158,7 @@ export class Ab1ECSStack extends Stack {
       targetUtilizationPercent: 75,
     });
 
-    const listener = elb.addListener("Listener", {
+    const listener = this.loadbalancer.addListener("Listener", {
       port: 80,
       //certificates: [privatecert],
     });
@@ -149,22 +170,22 @@ export class Ab1ECSStack extends Stack {
     });
 
     // outputs to be used in code deployments
-    new cdk.CfnOutput(this, `ServiceName`, {
+    new CfnOutput(this, `ServiceName`, {
       exportName: `ServiceName`,
       value: service.serviceName,
     });
 
-    new cdk.CfnOutput(this, `ImageRepositoryUri`, {
+    new CfnOutput(this, `ImageRepositoryUri`, {
       exportName: `ImageRepositoryUri`,
       value: repository.repositoryUri,
     });
 
-    new cdk.CfnOutput(this, `ImageName`, {
+    new CfnOutput(this, `ImageName`, {
       exportName: `ImageName`,
       value: image.imageName,
     });
 
-    new cdk.CfnOutput(this, `ClusterName`, {
+    new CfnOutput(this, `ClusterName`, {
       exportName: `ClusterName`,
       value: cluster.clusterName,
     });

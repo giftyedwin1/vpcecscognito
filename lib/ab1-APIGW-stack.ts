@@ -5,21 +5,31 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as elasticloadbalancer from "aws-cdk-lib/aws-elasticloadbalancingv2";
 import * as cognito from 'aws-cdk-lib/aws-cognito'
-import { AuthorizationType } from 'aws-cdk-lib/aws-apigateway';
+import { AuthorizationType, MethodLoggingLevel } from 'aws-cdk-lib/aws-apigateway';
+import { Vpc } from 'aws-cdk-lib/aws-ec2';
+import { NetworkLoadBalancer } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import { UserPool } from 'aws-cdk-lib/aws-cognito';
+
+
+export interface Ab1APIGWStackProps extends cdk.StackProps {
+  vpc: Vpc,
+  nlb: NetworkLoadBalancer,
+  tenant: string,
+  userPool: UserPool
+}
+
 
 export class Ab1APIGWStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, props?: Ab1APIGWStackProps) {
     super(scope, id, props);
 
-    const clientPrefix = `Greenman`;
-    const vpcId = 'Ab1VPCStack/Greenman-vpc'
-    const nlbArn = `arn:aws:elasticloadbalancing:us-east-1:527384991348:loadbalancer/net/Ab1EC-green-9WF6JWY7ZO7J/0209e9350c109a41`;
-    const userPoolArn = `arn:aws:cognito-idp:us-east-1:527384991348:userpool/us-east-1_OXoibuufg`;
-
-    const tenantVpc = ec2.Vpc.fromLookup(this, `${clientPrefix}-link`, {vpcName: `${vpcId}`});
-    const nlb = elasticloadbalancer.NetworkLoadBalancer.fromLookup(this, '${clientPrefix}-nlb', {loadBalancerArn: `${nlbArn}`});
+    const clientPrefix = props?.tenant;
+    const userPoolArn = props?.userPool.userPoolArn!;
+   
+    const tenantVpc = props?.vpc!;
+    const nlb = props?.nlb!;
     
-    const vpcLink = new apigateway.VpcLink(this, `$clientPrefix}-vpc-ink`, {
+    const vpcLink = new apigateway.VpcLink(this, `${clientPrefix}-vpc-ink`, {
       targets: [nlb],
     });
 
@@ -38,6 +48,11 @@ export class Ab1APIGWStack extends Stack {
 
     const restapi = new apigateway.RestApi(this, "RestApi", {
       restApiName: "Tenant API to nlb",
+      deployOptions: {
+        dataTraceEnabled: true,
+        loggingLevel: MethodLoggingLevel.INFO,
+        tracingEnabled: true
+      },      
       endpointTypes: [apigateway.EndpointType.REGIONAL],
       defaultIntegration: integration
     });

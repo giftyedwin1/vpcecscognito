@@ -2,15 +2,23 @@ import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import { Vpc } from 'aws-cdk-lib/aws-ec2';
+
+export interface Ab1VPCStackProps extends cdk.StackProps {
+  tenant: string;
+}
 
 export class Ab1VPCStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  
+  public readonly vpc: Vpc;
+  
+  constructor(scope: Construct, id: string, props?: Ab1VPCStackProps) {
     super(scope, id, props);
 
-    const clientPrefix = `Greenman`;
+    const clientPrefix = props?.tenant!;
 
     // Create VPC for use with Neptune
-    const octankVpc = new ec2.Vpc(this, `${clientPrefix}-vpc`, {
+    this.vpc = new Vpc(this, `${clientPrefix}-vpc`, {
       cidr: "192.168.0.0/16",
       maxAzs: 2,
       natGateways: 1,
@@ -38,7 +46,7 @@ export class Ab1VPCStack extends Stack {
 
     // Output the VPC ID
     new cdk.CfnOutput(this, "VPCId", {
-      value: octankVpc.vpcId,
+      value: this.vpc.vpcId,
       description: `${clientPrefix}-VPC ID`,
       exportName: `${clientPrefix}-VpcStack:vpcId`
     });

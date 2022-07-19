@@ -16,6 +16,9 @@
 
 
 
+If this is a brand new account run
+* `cdk bootstrap`
+
 Deploy the stacks, in the following order
 * `cdk deploy Ab1VPCStack`      deploy VPC/Subnet Stack
 * `cdk deploy Ab1ECSStack`      deploy ECS stack

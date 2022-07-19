@@ -8,33 +8,42 @@ import { Ab1CognitoStack } from '../lib/ab1-Cognito-stack';
 
 const app = new cdk.App();
 
-//Gifty Isengard test
-const env_us_east1  = { account: '527384991348', region: 'us-east-1' };
+//Gifty Isengard acme
+const env_us_east1  = { account: '876849536577', region: 'us-east-1' };
+const tenant = 'acme';
 
-new Ab1VPCStack(app, 'Ab1VPCStack', {
+const vpcStack = new Ab1VPCStack(app, 'Ab1VPCStack', {
   env: env_us_east1,
   tags: {
-    tenant: 'Greenman',
-  }
+    tenant: tenant,
+  },
+  tenant: tenant
 });
 
-new Ab1ECSStack(app, 'Ab1ECSStack', {
+const ecsStack = new Ab1ECSStack(app, 'Ab1ECSStack', {
   env: env_us_east1,
   tags: {
-    tenant: 'Greenman',
+    tenant: tenant,
+  },
+  tenant: tenant,
+  vpc: vpcStack.vpc
+});
+
+const cognitoStack = new Ab1CognitoStack(app, 'Ab1CognitoStack', {
+  env: env_us_east1,
+  tags: {
+    tenant: tenant,
   }
 });
 
 new Ab1APIGWStack(app, 'Ab1APIGWStack', {
   env: env_us_east1,
   tags: {
-    tenant: 'Greenman',
-  }
+    tenant: tenant,
+  },
+  tenant: tenant,
+  vpc: vpcStack.vpc,
+  nlb: ecsStack.loadbalancer,
+  userPool: cognitoStack.userPool
 });
 
-new Ab1CognitoStack(app, 'Ab1CognitoStack', {
-  env: env_us_east1,
-  tags: {
-    tenant: 'Greenman',
-  }
-});
