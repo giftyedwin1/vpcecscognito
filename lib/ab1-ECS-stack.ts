@@ -8,10 +8,9 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as route53 from "aws-cdk-lib/aws-route53";
 
 import * as elasticloadbalancer from "aws-cdk-lib/aws-elasticloadbalancingv2";
-import { domain } from 'process';
 import { ISubnet, Peer, Port, SecurityGroup } from 'aws-cdk-lib/aws-ec2';
 import { NetworkLoadBalancer } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
-import { Policy, Role } from 'aws-cdk-lib/aws-iam';
+import { ManagedPolicy, Policy, Role } from 'aws-cdk-lib/aws-iam';
 import { ContainerImage, FargateTaskDefinition, LogDriver, RepositoryImage } from 'aws-cdk-lib/aws-ecs';
 import { DockerImageAsset } from 'aws-cdk-lib/aws-ecr-assets';
 import * as path from 'path';
@@ -109,6 +108,10 @@ export class Ab1ECSStack extends Stack {
           })
         ],
       })
+    );
+
+    taskRole.addManagedPolicy(
+      ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess')
     );
 
     const taskDefinition = new FargateTaskDefinition(this,`${clientPrefix}-task`, {

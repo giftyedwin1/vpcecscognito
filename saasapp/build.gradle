@@ -18,6 +18,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	
 	implementation 'com.amazonaws:aws-java-sdk-translate'
+	implementation 'com.amazonaws:aws-java-sdk-dynamodb'
+	implementation 'org.projectlombok:lombok'
 	implementation 'com.amazonaws:aws-xray-recorder-sdk-core:2.11.0'
 	
 }

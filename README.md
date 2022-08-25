@@ -25,6 +25,7 @@ e.g
 * `cdk synth`       emits the synthesized CloudFormation template
 
 
+# Make sure docker is installed locally
 
 If this is a brand new account run
 * `cdk bootstrap`

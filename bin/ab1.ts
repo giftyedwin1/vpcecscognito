@@ -9,8 +9,8 @@ import { Ab1CognitoStack } from '../lib/ab1-Cognito-stack';
 const app = new cdk.App();
 
 //Gifty Isengard acme
-const env_us_east1  = { account: '876849536577', region: 'us-east-1' };
-const tenant = 'acme';
+const env_us_east1  = { account: '884535117483', region: 'us-east-1' };
+const tenant = 'etsy';
 
 const vpcStack = new Ab1VPCStack(app, 'Ab1VPCStack', {
   env: env_us_east1,
